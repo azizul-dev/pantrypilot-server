@@ -7,12 +7,17 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "build": "tsc",
     "start": "node dist/index.js",
-    "seed": "ts-node src/utils/seeder.ts"
+    "seed": "ts-node scripts/seed.ts"
   },
-  "keywords": ["pantrypilot", "recipe", "api"],
+  "keywords": [
+    "pantrypilot",
+    "recipe",
+    "api"
+  ],
   "author": "PantryPilot",
   "license": "MIT",
   "dependencies": {
+    "@google/generative-ai": "^0.24.1",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",

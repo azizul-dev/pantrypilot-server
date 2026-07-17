@@ -7,8 +7,10 @@ import { FRONTEND_ORIGIN, NODE_ENV } from './config/constants';
 // ─── Route imports ────────────────────────────────────────────────────────────
 import authRoutes from './routes/auth.routes';
 import recipeRoutes from './routes/recipe.routes';
-import reviewRoutes from './routes/review.routes';
+import nestedReviewRoutes from './routes/review.routes';   // nested: /api/recipes/:recipeId/reviews  (old)
+import reviewRoutes from './routes/review.routes';          // standalone: /api/reviews
 import userRoutes from './routes/user.routes';
+import aiRoutes from './routes/ai.routes';
 
 // ─── Middleware imports ───────────────────────────────────────────────────────
 import errorMiddleware from './middleware/error.middleware';
@@ -41,6 +43,7 @@ app.get('/health', (_req: Request, res: Response) => {
     data: {
       env: NODE_ENV,
       timestamp: new Date().toISOString(),
+      version: '1.0.0',
     },
   });
 });
@@ -48,8 +51,15 @@ app.get('/health', (_req: Request, res: Response) => {
 // ─── API Routes ───────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
 app.use('/api/recipes', recipeRoutes);
-app.use('/api/recipes/:recipeId/reviews', reviewRoutes);
+
+// Nested: GET/POST /api/recipes/:recipeId/reviews
+app.use('/api/recipes/:recipeId/reviews', nestedReviewRoutes);
+
+// Standalone: POST /api/reviews  |  GET /api/reviews/recipe/:recipeId
+app.use('/api/reviews', reviewRoutes);
+
 app.use('/api/users', userRoutes);
+app.use('/api/ai', aiRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req: Request, res: Response) => {

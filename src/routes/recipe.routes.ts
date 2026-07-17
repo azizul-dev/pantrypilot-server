@@ -41,9 +41,14 @@ const recipeValidation = [
 // ─── Public routes ────────────────────────────────────────────────────────────
 router.get('/', recipeController.getRecipes);
 router.get('/top-rated', recipeController.getTopRated);
+
+// ─── Protected: current user's recipes — must be BEFORE /:id ─────────────────
+router.get('/user/mine', protect, recipeController.getMyRecipes);
+
+// ─── Public: single recipe ────────────────────────────────────────────────────
 router.get('/:id', recipeController.getRecipe);
 
-// ─── Protected routes ─────────────────────────────────────────────────────────
+// ─── Protected: create / update / delete ─────────────────────────────────────
 router.post('/', protect, recipeValidation, recipeController.createRecipe);
 router.put('/:id', protect, recipeController.updateRecipe);
 router.delete('/:id', protect, recipeController.deleteRecipe);

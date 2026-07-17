@@ -128,3 +128,31 @@ export const getTopRated = async (
     next(error);
   }
 };
+
+export const getMyRecipes = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    if (!req.user) {
+      sendError(res, 'Not authenticated.', 401);
+      return;
+    }
+
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = Math.min(parseInt(req.query.limit as string, 10) || 10, 50);
+    const sortBy = (req.query.sortBy as string) || '-createdAt';
+
+    const result = await recipeService.getRecipesByAuthor(
+      req.user.id,
+      page,
+      limit,
+      sortBy
+    );
+
+    sendSuccess(res, 'Your recipes fetched successfully.', result);
+  } catch (error) {
+    next(error);
+  }
+};

@@ -145,3 +145,31 @@ export const getTopRatedRecipes = async (limitCount = 6): Promise<IRecipe[]> => 
     .limit(limitCount)
     .lean() as unknown as IRecipe[];
 };
+
+export const getRecipesByAuthor = async (
+  authorId: string,
+  page = 1,
+  limit = 10,
+  sortBy = '-createdAt'
+): Promise<PaginatedRecipes> => {
+  const skip = (page - 1) * limit;
+  const [recipes, total] = await Promise.all([
+    Recipe.find({ authorId })
+      .populate('authorId', 'name avatar email')
+      .sort(sortBy)
+      .skip(skip)
+      .limit(limit)
+      .lean(),
+    Recipe.countDocuments({ authorId }),
+  ]);
+
+  const totalPages = Math.ceil(total / limit);
+  return {
+    recipes: recipes as unknown as IRecipe[],
+    total,
+    page,
+    totalPages,
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+  };
+};
