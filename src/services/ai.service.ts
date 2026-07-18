@@ -55,25 +55,33 @@ export const suggestRecipes = async (
   }));
 
   const prompt = `
-You are a smart cooking assistant for PantryPilot, a recipe app. 
+You are a smart cooking assistant for PantryPilot, a recipe app.
 
-The user has these ingredients available:
+The user typed the following into the "ingredients" box:
 ${userIngredients.map((i) => `- ${i}`).join('\n')}
+
+First, silently classify the input into ONE of two cases:
+- CASE A — Ingredient list: the input is a list of actual food items the user already has on hand (e.g. "onion", "rice", "chicken breast").
+- CASE B — Dish question: the input is a question, sentence, or dish name asking what is needed to cook something (e.g. "what is needed to cook chicken biryani?", "how to make butter chicken", "mutton biryani ingredients").
 
 Here are recipes available in the database (JSON):
 ${JSON.stringify(recipeSummaries, null, 2)}
 
-Analyze which recipes the user can make (fully or mostly) with their ingredients.
 Return EXACTLY the top 3 best matching recipes as a JSON array.
 Each item must have:
 - "recipeId": the recipe's id string
 - "title": recipe title
-- "matchScore": integer 0-100 representing how well user's ingredients match
-- "reasoning": 1-2 sentence explanation of why this is a good match
-- "missingIngredients": array of ingredient names the user is missing
-- "canMakeWith": array of user's ingredients that are used in this recipe
+- "matchScore": integer 0-100
+- "reasoning": 1-2 sentence explanation
+- "missingIngredients": array of ingredient names
+- "canMakeWith": array of ingredient names
 
-Prioritize recipes with higher matchScore (more ingredients available). 
+Scoring rules:
+- If CASE A: matchScore = how well the user's listed ingredients match the recipe's ingredients (as a normal pantry-match). "missingIngredients" = recipe ingredients the user did NOT list. "canMakeWith" = the user's ingredients that ARE used in this recipe.
+- If CASE B: matchScore = how closely the recipe matches the specific dish the user is asking about (100 if it is essentially the exact dish requested, lower for a related/alternative version, low if only loosely related). "missingIngredients" = the FULL ingredient list required for that recipe (the user hasn't said what they already have). "canMakeWith" = empty array [].
+- If CASE B and nothing in the database is a close match, still return the closest related recipes with an honestly lower matchScore, and mention in "reasoning" that it isn't an exact match.
+
+Prioritize higher matchScore first.
 Respond ONLY with a valid JSON array, no markdown, no extra text.
 `;
 
