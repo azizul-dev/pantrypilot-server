@@ -87,3 +87,14 @@ export const deleteReview = async (
 
   await Review.findOneAndDelete({ _id: reviewId });
 };
+
+export const getFeaturedReviews = async (limit = 5): Promise<IReview[]> => {
+  const reviews = await Review.find({ rating: { $gte: 4 } })
+    .populate('userId', 'name avatar')
+    .populate('recipeId', 'title')
+    .sort({ rating: -1, createdAt: -1 })
+    .limit(limit)
+    .lean();
+
+  return reviews as unknown as IReview[];
+};

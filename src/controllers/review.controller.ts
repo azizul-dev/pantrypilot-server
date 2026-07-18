@@ -157,3 +157,16 @@ export const deleteReview = async (
     next(error);
   }
 };
+
+export const getFeatured = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const reviews = await reviewService.getFeaturedReviews(5);
+    sendSuccess(res, 'Featured reviews fetched successfully.', { reviews });
+  } catch (error) {
+    next(error);
+  }
+};

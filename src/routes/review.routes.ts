@@ -30,6 +30,11 @@ const updateValidation = [
 // ─── POST /api/reviews ────────────────────────────────────────────────────────
 router.post('/', protect, reviewValidation, reviewController.createStandaloneReview);
 
+// ─── GET /api/reviews/featured ───────────────────────────────────────────────
+router.get('/featured', reviewController.getFeatured);
+
+// ─── GET /api/reviews/featured ───────────────────────────────────────────────
+
 // ─── GET /api/reviews/recipe/:recipeId ───────────────────────────────────────
 router.get('/recipe/:recipeId', reviewController.getReviewsByRecipeId);
 
