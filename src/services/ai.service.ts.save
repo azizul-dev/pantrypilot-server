@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
+cimport { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from '@google/generative-ai';
 import { GEMINI_API_KEY } from '../config/constants';
 import { IRecipe } from '../types';
 
@@ -7,7 +7,7 @@ const genAI = new GoogleGenerativeAI(GEMINI_API_KEY);
 
 const getModel = () =>
   genAI.getGenerativeModel({
-    model: 'gemini-flash-latest',
+    model: 'gemini-1.5-flash',
     safetySettings: [
       { category: HarmCategory.HARM_CATEGORY_HARASSMENT, threshold: HarmBlockThreshold.BLOCK_NONE },
       { category: HarmCategory.HARM_CATEGORY_HATE_SPEECH, threshold: HarmBlockThreshold.BLOCK_NONE },
@@ -117,7 +117,7 @@ Key Steps: ${keySteps.join('; ')}
 
 Provide a JSON response with exactly these fields:
 - "shortDescription": A compelling 1-2 sentence teaser (max 200 chars)
-- "fullDescription": An engaging description in ${targetWords} words. Include the origin/culture if relevant, what makes it special, and the experience of eating it.
+ "fullDescription": An engaging description in ${targetWords} words. Include the origin/culture if relevant, what makes it special, and the experience of eating it.
 - "nutritionSummary": A brief 1-2 sentence estimate of nutrition highlights (calories, protein, key nutrients). Note this is an estimate.
 - "cookingTips": An array of exactly 2 practical, specific cooking tips to get the best results.
 
