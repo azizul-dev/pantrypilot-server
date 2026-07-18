@@ -14,9 +14,11 @@ export interface IUser extends Document {
   _id: Types.ObjectId;
   name: string;
   email: string;
-  password: string;
+  password?: string;
   avatar?: string;
   role: "user" | "admin";
+  provider: "local" | "google";
+  googleId?: string;
   wishlist: Types.ObjectId[];
   createdAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;

@@ -46,6 +46,10 @@ router.post(
 // Returns demo user JWT + credentials for frontend auto-fill
 router.post('/demo-login', authController.demoLogin);
 
+// ─── POST /api/auth/google ────────────────────────────────────────────────────
+// Called by NextAuth after Google OAuth succeeds, to mint a backend JWT
+router.post('/google', authController.googleLogin);
+
 // ─── GET /api/auth/me ─────────────────────────────────────────────────────────
 router.get('/me', protect, authController.getMe);
 

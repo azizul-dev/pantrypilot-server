@@ -96,3 +96,27 @@ export const getMe = async (
     next(error);
   }
 };
+
+export const googleLogin = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void> => {
+  try {
+    const { email, name, avatar, googleId } = req.body;
+
+    if (!email || !name || !googleId) {
+      sendError(res, 'Missing required Google profile fields.', 400);
+      return;
+    }
+
+    const result = await authService.googleAuth(email, name, avatar, googleId);
+
+    sendSuccess(res, 'Google login successful.', {
+      user: result.user,
+      token: result.token,
+    });
+  } catch (error) {
+    next(error);
+  }
+};

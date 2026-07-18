@@ -67,3 +67,37 @@ export const getDemoCredentials = (): { email: string; password: string } => {
     password: DEMO_USER.password,
   };
 };
+
+export const googleAuth = async (
+  email: string,
+  name: string,
+  avatar: string | undefined,
+  googleId: string
+): Promise<AuthResult> => {
+  let user = await User.findOne({ email: email.toLowerCase() });
+
+  if (user) {
+    if (!user.googleId) {
+      user.googleId = googleId;
+      user.provider = 'google';
+      await user.save();
+    }
+  } else {
+    user = await User.create({
+      name,
+      email,
+      avatar,
+      provider: 'google',
+      googleId,
+    });
+  }
+
+  const token = generateToken({
+    id: user._id.toString(),
+    email: user.email,
+    role: user.role,
+  });
+
+  return { user: user.toJSON() as unknown as Omit<IUser, 'password'>, token };
+};
+
