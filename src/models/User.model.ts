@@ -37,6 +37,13 @@ const UserSchema = new Schema<IUser>(
       enum: ['user', 'admin'],
       default: 'user',
     },
+    wishlist: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Recipe',
+        default: [],
+      },
+    ],
   },
   {
     timestamps: true,

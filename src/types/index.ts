@@ -17,6 +17,7 @@ export interface IUser extends Document {
   password: string;
   avatar?: string;
   role: 'user' | 'admin';
+  wishlist: Types.ObjectId[];
   createdAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
 }
