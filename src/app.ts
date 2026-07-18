@@ -12,6 +12,7 @@ import reviewRoutes from './routes/review.routes';          // standalone: /api/
 import userRoutes from './routes/user.routes';
 import aiRoutes from './routes/ai.routes';
 import wishlistRoutes from './routes/wishlist.routes';
+import blogRoutes from './routes/blog.routes';
 
 // ─── Middleware imports ───────────────────────────────────────────────────────
 import errorMiddleware from './middleware/error.middleware';
@@ -62,6 +63,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/ai', aiRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/blogs', blogRoutes);
 
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((req: Request, res: Response) => {

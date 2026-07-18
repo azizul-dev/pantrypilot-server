@@ -1,11 +1,11 @@
-import { Document, Types } from 'mongoose';
+import { Document, Types } from "mongoose";
 
 // ─── Auth / JWT ───────────────────────────────────────────────────────────────
 
 export interface IUserPayload {
   id: string;
   email: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
 }
 
 // ─── User ─────────────────────────────────────────────────────────────────────
@@ -16,7 +16,7 @@ export interface IUser extends Document {
   email: string;
   password: string;
   avatar?: string;
-  role: 'user' | 'admin';
+  role: "user" | "admin";
   wishlist: Types.ObjectId[];
   createdAt: Date;
   comparePassword(candidatePassword: string): Promise<boolean>;
@@ -29,8 +29,8 @@ export interface IIngredient {
   quantity: string;
 }
 
-export type DietType = 'veg' | 'non-veg' | 'vegan';
-export type DifficultyLevel = 'easy' | 'medium' | 'hard';
+export type DietType = "veg" | "non-veg" | "vegan";
+export type DifficultyLevel = "easy" | "medium" | "hard";
 
 export interface IRecipe extends Document {
   _id: Types.ObjectId;
@@ -47,6 +47,19 @@ export interface IRecipe extends Document {
   authorId: Types.ObjectId;
   avgRating: number;
   totalReviews: number;
+  createdAt: Date;
+}
+// ─── Blog ─────────────────────────────────────────────────────────────────────
+
+export interface IBlog extends Document {
+  _id: Types.ObjectId;
+  title: string;
+  excerpt: string;
+  content: string;
+  category: string;
+  image: string;
+  authorId: Types.ObjectId;
+  readTime: string;
   createdAt: Date;
 }
 
