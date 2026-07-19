@@ -13,8 +13,8 @@ export interface RecipeFilters {
   page?: number;
   limit?: number;
   sortBy?: string;
+  maxCookTime?: number;
 }
-
 export interface PaginatedRecipes {
   recipes: IRecipe[];
   total: number;
@@ -36,6 +36,7 @@ export const getAllRecipes = async (
     page = 1,
     limit = 10,
     sortBy = '-createdAt',
+    maxCookTime,
   } = filters;
 
   const query: mongoose.FilterQuery<IRecipe> = {};
@@ -45,6 +46,7 @@ export const getAllRecipes = async (
   if (difficulty) query.difficulty = difficulty;
   if (authorId) query.authorId = authorId;
   if (search) query.$text = { $search: search };
+  if (maxCookTime) query.cookTime = { $lte: Number(maxCookTime) };
 
   const skip = (page - 1) * limit;
   const [recipes, total] = await Promise.all([
